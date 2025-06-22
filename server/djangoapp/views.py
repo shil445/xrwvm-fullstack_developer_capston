@@ -1,19 +1,13 @@
 # Uncomment the required imports before adding the code
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import logout
-from django.contrib import messages
-from datetime import datetime
+from django.contrib.auth import logout, login, authenticate
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .restapis import get_request, analyze_review_sentiments, post_review
 
-from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
 import logging
 import json
-from django.views.decorators.csrf import csrf_exempt
 
 # from .populate import initiate
 
@@ -56,8 +50,6 @@ def logout_request(request):
 # @csrf_exempt
 @csrf_exempt
 def registration(request):
-    context = {}
-
     # Load JSON data from the request body
     data = json.loads(request.body)
     username = data["userName"]
@@ -66,12 +58,11 @@ def registration(request):
     last_name = data["lastName"]
     email = data["email"]
     username_exist = False
-    email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
-    except:
+    except User.DoesNotExist:
         # If not, simply log this is a new user
         logger.debug("{} is new user".format(username))
 
@@ -142,12 +133,12 @@ def get_dealer_details(request, dealer_id):
 
 # Create a `add_review` view to submit a review
 def add_review(request):
-    if request.user.is_anonymous == False:
+    if not request.user.is_anonymous:
         data = json.loads(request.body)
         try:
-            response = post_review(data)
+            post_review(data)
             return JsonResponse({"status": 200})
-        except:
+        except Exception as e:
             return JsonResponse({"status": 401, "message": "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
