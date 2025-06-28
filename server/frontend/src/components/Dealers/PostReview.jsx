@@ -34,9 +34,9 @@ const PostReview = () => {
       return;
     }
 
-    // let model_split = model.split(" ");
-    // let make_chosen = model_split[0];
-    // let model_chosen = model_split[1];
+    let model_split = model.split(" ");
+    let make_chosen = model_split[0];
+    let model_chosen = model_split[1];
 
     let jsoninput = JSON.stringify({
       name: name,
@@ -44,8 +44,8 @@ const PostReview = () => {
       review: review,
       purchase: true,
       purchase_date: date,
-      car_make: "test",
-      car_model: "test",
+      car_make: make_chosen,
+      car_model: model_chosen,
       car_year: year,
     });
 
@@ -81,7 +81,7 @@ const PostReview = () => {
     });
     const retobj = await res.json();
 
-    let carmodelsarr = Array.from(retobj.CarModels);
+    let carmodelsarr = Array.from(retobj.cars);
     setCarmodels(carmodelsarr);
   };
   useEffect(() => {
@@ -115,8 +115,8 @@ const PostReview = () => {
               Choose Car Make and Model
             </option>
             {carmodels.map((carmodel) => (
-              <option value={carmodel.CarMake + " " + carmodel.CarModel}>
-                {carmodel.CarMake} {carmodel.CarModel}
+              <option value={carmodel.make + " " + carmodel.model}>
+                {carmodel.make} {carmodel.model}
               </option>
             ))}
           </select>

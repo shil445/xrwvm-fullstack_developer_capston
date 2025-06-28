@@ -6,6 +6,7 @@ ADD package.json .
 ADD app.js .
 ADD review.js .
 ADD dealership.js .
+ADD data/car_records.json .
 ADD data/dealerships.json .
 ADD data/reviews.json .
 COPY . .

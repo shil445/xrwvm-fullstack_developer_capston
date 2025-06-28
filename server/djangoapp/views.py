@@ -94,7 +94,7 @@ def get_dealerships(request, state="All"):
     else:
         endpoint = "/fetchDealers/" + state
     dealerships = get_request(endpoint)
-    return JsonResponse({"status": 200, "dealers": dealerships})
+    return JsonResponse(dealerships)
 
 
 # ...
@@ -123,7 +123,7 @@ def get_dealer_details(request, dealer_id):
     if dealer_id:
         endpoint = "/fetchDealer/" + str(dealer_id)
         dealership = get_request(endpoint)
-        return JsonResponse({"status": 200, "dealer": dealership})
+        return JsonResponse(dealership)
     else:
         return JsonResponse({"status": 400, "message": "Bad Request"})
 
@@ -145,3 +145,7 @@ def add_review(request):
 
 
 # ...
+def get_car(request):
+    endpoint = "cars"
+    cars = get_request(endpoint)
+    return JsonResponse(cars)

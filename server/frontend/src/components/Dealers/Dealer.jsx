@@ -30,7 +30,7 @@ const Dealer = () => {
     const retobj = await res.json();
     if (retobj.status === 200) {
       console.log(retobj);
-      setDealer(retobj.dealer.dealer);
+      setDealer(retobj.dealer);
     }
   };
 
@@ -89,19 +89,6 @@ const Dealer = () => {
         </h4>
       </div>
       <div class="reviews_panel">
-        <div className="review_panel">
-          <img
-            src={senti_icon("positive")}
-            className="emotion_icon"
-            alt="Sentiment"
-          />
-          <div className="review">
-            Excellent service! The staff was very helpful and professional. I
-            found exactly what I was looking for at a great price. Highly
-            recommend this dealership for anyone looking to buy a car.
-          </div>
-          <div className="reviewer">Toyota Camry 2022</div>
-        </div>
         {reviews.length === 0 && unreviewed === false ? (
           <text>Loading Reviews....</text>
         ) : unreviewed === true ? (
