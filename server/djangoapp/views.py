@@ -4,12 +4,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .restapis import get_request, analyze_review_sentiments, post_review
+from .restapis import get_request, analyze_review_sentiments
+from .models import CarMake, CarModel
 
 import logging
 import json
 
-# from .populate import initiate
+from .populate import initiate
 
 
 # Get an instance of a logger
@@ -149,3 +150,15 @@ def get_car(request):
     endpoint = "cars"
     cars = get_request(endpoint)
     return JsonResponse(cars)
+
+
+def get_cars(request):
+    count = CarMake.objects.filter().count()
+    print(count)
+    if count == 0:
+        initiate()
+    car_models = CarModel.objects.select_related("car_make")
+    cars = []
+    for car_model in car_models:
+        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
+    return JsonResponse({"CarModels": cars})
